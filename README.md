@@ -1,7 +1,9 @@
 gandi-ddyns
 ===========
 
-Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  Designed specifically with Raspberry Pis in mind, but could be used anywhere.  
+Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  It is very similar to no-ip and dyndns et al where you can have a domain on the internet which points at your computer's IP address, except it is free (once you have registered the domain) and does not suffer from any forced refreshing etc.  
+
+This was designed specifically with Raspberry Pi servers in mind, but could be used anywhere.  
 
 Every time the script runs it will get the current domain config from gandi.net's API and look for the IP in the A record for the domain (default name for the record is '@' but you can change that if you want to).  It will then get your current external IP from a public "what is my ip" site.  Once it has both IPs it will compare what is in the DNS config vs what your IP is, and update the DNS config for the domain as appropriate so that it resolves to your current IP address.
 
@@ -46,6 +48,6 @@ You need to make sure you set the ```domain``` variable to match your domain nam
 
 You need to make sure you enter the correct gandi.net production API key.
 
-** I am getting a python trace about ```'Error on object : OBJECT_ACCOUNT (CAUSE_NORIGHT) [Invalid API key]```?**
+**I am getting a python trace about ```'Error on object : OBJECT_ACCOUNT (CAUSE_NORIGHT) [Invalid API key]```?**
 
 Double-check you got the right gandi.net API key.  Double-check that you are using a production key!
