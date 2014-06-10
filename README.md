@@ -1,4 +1,51 @@
 gandi-ddyns
 ===========
 
-Simple script to update DNS A record of your domain dynamically using gandi.net's API
+Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  Designed specifically with Raspberry Pis in mind, but could be used anywere.  
+
+Every time the script runs it will get the current domain config from gandi.net's API and look for the IP in the A record for the domain (default name for the record is '@' but you can change that if you want to).  It will then get your current external IP from a public "what is my ip" site.  Once it has both IPs it will compare what is in the DNS config vs what your IP is, and update the DNS config for the domain as appropriate so that it resolves to your current IP address.
+
+Usage
+-----
+You will need to make sure that your domain is registered on gandi.net, and that you are using the gandi.net DNS servers (if you are using the default gandi.net zone for other domains you have on gandi.net, you might want to create a dedicated zone for the domain you will be using).  You'll also need to register for the API to get a key.  
+
+Once you have the production key (not the test environment key) and your domain on gandi.net, edit the 'apikey' and 'domain' variables in the script appropriately.
+
+Once you have done this you can then set up the script to run via crontab:
+
+```
+sudo crontab -e
+```
+
+Then add the following line so that the script is run after a reboot:
+
+```
+@reboot python /home/pi/gandi-ddns.py &
+```
+
+And then to make it check for a new IP every 15 mintes you can add:
+
+```
+*/15 * * * * python /home/pi/gandi-ddns.py
+```
+You can then start and/or reload the cron config:
+
+```
+sudo /etc/init.d/cron start
+sudo /etc/init.d/cron reload
+
+```
+
+FAQ
+---
+**I am getting a python trace about ```Error on object : OBJECT_FQDN (CAUSE_BADPARAMETER) [string '<change me>' does not match '^(?:(?!-)[-a-zA-Z0-9]{1,63}(?<!-)(\\.|$)){2,}$']```?**
+
+You need to make sure you set the ```domain``` variable to match your domain name (no www), e.g. 'example.com'.
+
+**I am getting a python trace about ```Error on object : OBJECT_STRING (CAUSE_BADPARAMETER) [string 'OmQUMmhelfrbXQyA3R4I6Ma' does not match '^[a-z0-9]{24}$']```?**
+
+You need to make sure you enter the correct gandi.net production API key.
+
+** I am getting a python trace about ```'Error on object : OBJECT_ACCOUNT (CAUSE_NORIGHT) [Invalid API key]```?**
+
+Double-check you got the right gandi.net API key.  Double-check that you are using a production key!
