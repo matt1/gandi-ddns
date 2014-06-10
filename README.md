@@ -1,7 +1,7 @@
 gandi-ddyns
 ===========
 
-Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  Designed specifically with Raspberry Pis in mind, but could be used anywere.  
+Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  Designed specifically with Raspberry Pis in mind, but could be used anywhere.  
 
 Every time the script runs it will get the current domain config from gandi.net's API and look for the IP in the A record for the domain (default name for the record is '@' but you can change that if you want to).  It will then get your current external IP from a public "what is my ip" site.  Once it has both IPs it will compare what is in the DNS config vs what your IP is, and update the DNS config for the domain as appropriate so that it resolves to your current IP address.
 
