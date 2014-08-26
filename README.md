@@ -1,5 +1,5 @@
-gandi-ddyns
-===========
+gandi-ddns
+==========
 
 Simple quick & dirty script to update DNS A record of your domain dynamically using gandi.net's API.  It is very similar to no-ip and dyndns et al where you can have a domain on the internet which points at your computer's IP address, except it is free (once you have registered the domain) and does not suffer from any forced refreshing etc.  
 
