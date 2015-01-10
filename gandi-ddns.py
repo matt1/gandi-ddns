@@ -52,7 +52,7 @@ def get_ip():
 	
 	try:
 	  # Could be any service that just gives us a simple raw ASCII IP address (not HTML etc)
-	  result = urllib2.urlopen("http://myexternalip.com/raw", timeout=3).read()
+	  result = urllib2.urlopen("http://ipv4.myexternalip.com/raw", timeout=3).read()
 	except Exception:
 	  print 'Unable to external IP address.'
 	  sys.exit(2);
