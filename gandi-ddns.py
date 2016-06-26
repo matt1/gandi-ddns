@@ -1,5 +1,10 @@
-import xmlrpclib
-import urllib2
+from __future__ import print_function
+try:
+  from xmlrpc import client as xmlrpclient
+  from urllib.request import urlopen
+except ImportError:
+  from urllib2 import urlopen
+  import xmlrpclib as xmlrpclient
 import sys
 
 # gandi.net API (Production) key
@@ -11,7 +16,7 @@ a_name = '@'
 # TTL (seconds = 5 mintes to 30 days)
 ttl = 900
 # Production API
-api = xmlrpclib.ServerProxy('https://rpc.gandi.net/xmlrpc/', verbose=False)
+api = xmlrpclient.ServerProxy('https://rpc.gandi.net/xmlrpc/', verbose=False)
 # Used to cache the zone_id for future calls
 zone_id = None
 
@@ -27,7 +32,7 @@ def get_zone_id():
 		current_zone_id = domain_info['zone_id']
 
 		if current_zone_id == 'None':
-		  print 'No zone - make sure domain is set to use gandi.net name servers.'
+		  print('No zone - make sure domain is set to use gandi.net name servers.')
 		  sys.exit(1)
 		
 		zone_id = current_zone_id
@@ -52,12 +57,12 @@ def get_ip():
 	
 	try:
 	  # Could be any service that just gives us a simple raw ASCII IP address (not HTML etc)
-	  result = urllib2.urlopen("http://ipv4.myexternalip.com/raw", timeout=3).read()
+	  result = urlopen("http://ipv4.myexternalip.com/raw", timeout=3).read()
 	except Exception:
-	  print 'Unable to external IP address.'
+	  print('Unable to external IP address.')
 	  sys.exit(2);
 	
-	return result
+	return result.decode()
 
 def change_zone_ip(new_ip):
   """ Change the zone record to the new IP """
@@ -83,11 +88,11 @@ def main():
   if (zone_ip.strip() == current_ip.strip()):
     sys.exit();
   else:
-    print 'DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip
+    print('DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip)
     change_zone_ip(current_ip)
     zone_id = None
     zone_ip = get_zone_ip();
-    print 'DNS A record update complete - set to ', zone_ip
+    print('DNS A record update complete - set to ', zone_ip)
 
 if __name__ == "__main__":
   main()
