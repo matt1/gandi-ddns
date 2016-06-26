@@ -13,7 +13,12 @@ import os
 # Used to cache the zone_id for future calls
 zone_id = None
 
+# name of the configuration file.
+# If the full path is not given, gandi-ddns.py will check for this file in
+# its current directory
 config_file = "config.txt"
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def get_zone_id(config, section):
 	""" Get the gandi.net ID for the current zone version"""
@@ -105,7 +110,10 @@ api = https://rpc.gandi.net/xmlrpc/
 
 def main():
   global api, zone_id
-  config = read_config(config_file)
+  path = config_file
+  if not path.startswith('/'):
+    path = os.path.join(SCRIPT_DIR, path)
+  config = read_config(path)
   if not config:
     sys.exit("please fill in the 'config.txt' file")
 
