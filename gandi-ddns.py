@@ -9,6 +9,7 @@ except ImportError:
   import ConfigParser as configparser
 import sys
 import os
+import socket
 
 # Used to cache the zone_id for future calls
 zone_id = None
@@ -102,6 +103,8 @@ a_name = @
 ttl = 900
 # Production API
 api = https://rpc.gandi.net/xmlrpc/
+# Host which IP should be changed
+host = localhost
 """)
     return None
   cfg = configparser.ConfigParser()
@@ -121,7 +124,9 @@ def main():
     api = xmlrpclient.ServerProxy(config.get(section, "api"), verbose=False)
 
     zone_ip = get_zone_ip(config, section).strip()
-    current_ip = get_ip()
+    current_ip = socket.gethostbyname(config.get(section, "host"))
+    if current_ip == '127.0.0.1':
+      current_ip = get_ip()
 
     if (zone_ip.strip() == current_ip.strip()):
       sys.exit();
