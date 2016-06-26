@@ -74,18 +74,20 @@ def change_zone_ip(new_ip):
   
   # Set new zone version as the active zone
   api.domain.zone.version.set(apikey, get_zone_id(), new_zone_ver)
-  
-zone_ip = get_zone_ip()
-current_ip = get_ip()
-
-if (zone_ip.strip() == current_ip.strip()):
-  sys.exit();
-else:
-  print 'DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip
-  change_zone_ip(current_ip)
-  zone_id = None
-  zone_ip = get_zone_ip();
-  print 'DNS A record update complete - set to ', zone_ip
 
 
-	
+def main():
+  zone_ip = get_zone_ip()
+  current_ip = get_ip()
+
+  if (zone_ip.strip() == current_ip.strip()):
+    sys.exit();
+  else:
+    print 'DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip
+    change_zone_ip(current_ip)
+    zone_id = None
+    zone_ip = get_zone_ip();
+    print 'DNS A record update complete - set to ', zone_ip
+
+if __name__ == "__main__":
+  main()
