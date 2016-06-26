@@ -117,21 +117,20 @@ def main():
   if not config:
     sys.exit("please fill in the 'config.txt' file")
 
-  section = config.sections()[0]
+  for section in config.sections():
+    api = xmlrpclient.ServerProxy(config.get(section, "api"), verbose=False)
 
-  api = xmlrpclient.ServerProxy(config.get(section, "api"), verbose=False)
+    zone_ip = get_zone_ip(config, section).strip()
+    current_ip = get_ip()
 
-  zone_ip = get_zone_ip(config, section).strip()
-  current_ip = get_ip()
-
-  if (zone_ip.strip() == current_ip.strip()):
-    sys.exit();
-  else:
-    print('DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip)
-    change_zone_ip(config, section, current_ip)
-    zone_id = None
-    zone_ip = get_zone_ip(config, section);
-    print('DNS A record update complete - set to ', zone_ip)
+    if (zone_ip.strip() == current_ip.strip()):
+      sys.exit();
+    else:
+      print('DNS Mistmatch detected: A-record: ', zone_ip, ' WAN IP: ', current_ip)
+      change_zone_ip(config, section, current_ip)
+      zone_id = None
+      zone_ip = get_zone_ip(config, section);
+      print('DNS A record update complete - set to ', zone_ip)
 
 if __name__ == "__main__":
   main()
