@@ -7,6 +7,27 @@ This was designed specifically with Raspberry Pi servers in mind, but could be u
 
 Every time the script runs it will get the current domain config from gandi.net's API and look for the IP in the A record for the domain (default name for the record is '@' but you can change that if you want to).  It will then get your current external IP from a public "what is my ip" site.  Once it has both IPs it will compare what is in the DNS config vs what your IP is, and update the DNS config for the domain as appropriate so that it resolves to your current IP address.
 
+The configuration is stored in the script directory under the file `config.txt`. The syntax is the standard Python configuration file, and the format is the following:
+```
+[local]
+# gandi.net API (Production) key
+apikey = <CHANGE ME>
+# Domain
+domain = <CHANGE ME>
+# A-record name
+a_name = @
+# TTL (seconds = 5 mintes to 30 days)
+ttl = 900
+# Production API
+api = https://rpc.gandi.net/xmlrpc/
+# Host which IP should be changed
+host = localhost
+```
+
+- Do not forget to replace the values marked with `<CHANGE ME>` with your API key and domain.
+- You can have more than one config section (`[local]` above) if you need to update more than one domain/a_name.
+- `host` is either `localhost` in which case the script will fetch the current external address, or any other public name. Using an other ddns account will allow you to sync it with Gandi (useful when you are not running on the same IP than the one you want to update).
+
 Usage
 -----
 You will need to make sure that your domain is registered on gandi.net, and that you are using the gandi.net DNS servers (if you are using the default gandi.net zone for other domains you have on gandi.net, you might want to create a dedicated zone for the domain you will be using).  You'll also need to register for the API to get a key.  
