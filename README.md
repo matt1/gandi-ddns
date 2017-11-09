@@ -24,7 +24,7 @@ api = https://rpc.gandi.net/xmlrpc/
 host = localhost
 ```
 
-- Do not forget to replace the values marked with `<CHANGE ME>` with your API key and domain.
+- Do not forget to replace the values marked with `<CHANGE ME>` with your 24-character API key and domain.
 - You can have more than one config section (`[local]` above) if you need to update more than one domain/a_name.
 - `host` is either `localhost` in which case the script will fetch the current external address, or any other public name. Using an other ddns account will allow you to sync it with Gandi (useful when you are not running on the same IP than the one you want to update).
 
