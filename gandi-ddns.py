@@ -115,7 +115,7 @@ def read_config(config_path):
                     # Host which IP should be changed
                     host = localhost
                     """)
-    return None
+        return None
     cfg = configparser.ConfigParser()
     cfg.read(config_path)
     return cfg
