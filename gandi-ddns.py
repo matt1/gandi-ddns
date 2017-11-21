@@ -97,24 +97,27 @@ def change_zone_ip(config, section, new_ip):
     api.domain.zone.version.set(apikey, zone_id, new_zone_ver)
 
 
+default_config = """[local]
+# gandi.net API (Production) key
+apikey = <CHANGE ME>
+# Domain
+domain = <CHANGE ME>
+# A-record name
+a_name = @
+# TTL (seconds = 5 mintes to 30 days)
+ttl = 900
+# Production API
+api = https://rpc.gandi.net/xmlrpc/
+# Host which IP should be changed
+host = localhost
+"""
+
+
 def read_config(config_path):
     """ Open the configuration file or create it if it doesn't exists """
     if not os.path.exists(config_path):
         with open(config_path, "w") as f:
-            f.write("""[local]
-                    # gandi.net API (Production) key
-                    apikey = <CHANGE ME>
-                    # Domain
-                    domain = <CHANGE ME>
-                    # A-record name
-                    a_name = @
-                    # TTL (seconds = 5 mintes to 30 days)
-                    ttl = 900
-                    # Production API
-                    api = https://rpc.gandi.net/xmlrpc/
-                    # Host which IP should be changed
-                    host = localhost
-                    """)
+            f.write(default_config)
         return None
     cfg = configparser.ConfigParser()
     cfg.read(config_path)
@@ -131,8 +134,7 @@ def main():
         sys.exit("please fill in the 'config.txt' file")
 
     for section in config.sections():
-        api = xmlrpclient.ServerProxy(config.get(section,
-                                                 "api"), verbose=False)
+        api = xmlrpclient.ServerProxy(config.get(section, "api"), verbose=False)
 
         zone_ip = get_zone_ip(config, section).strip()
         current_ip = socket.gethostbyname(config.get(section, "host"))
